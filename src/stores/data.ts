@@ -11,7 +11,7 @@ export interface Product {
 }
 
 export interface OrderItem {
-  id: string;
+  id?: string;
   productId: string;
   quantity: number;
   product?: Product;

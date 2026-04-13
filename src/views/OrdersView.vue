@@ -66,11 +66,13 @@ const getStatusIcon = (status: string) => {
     <!-- Search and Filter -->
     <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
       <div class="relative">
-        <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+        <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" aria-hidden="true" />
         <input
+          id="orders-search"
           v-model="searchQuery"
           type="text"
           placeholder="Buscar por nombre, fecha o producto..."
+          aria-label="Buscar pedidos"
           class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-white transition-shadow"
         />
       </div>
@@ -111,8 +113,11 @@ const getStatusIcon = (status: string) => {
                 </span>
               </td>
               <td class="p-4 text-right">
-                <button class="p-2 text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20">
-                  <Eye class="w-5 h-5" />
+                <button
+                  :aria-label="`Ver detalles del pedido de ${order.customerName}`"
+                  class="p-2 text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
+                >
+                  <Eye class="w-5 h-5" aria-hidden="true" />
                 </button>
               </td>
             </tr>

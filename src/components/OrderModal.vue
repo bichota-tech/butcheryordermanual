@@ -39,15 +39,20 @@ const getStatusColor = (status: string) => {
   <div class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
     <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" @click="emit('close')"></div>
     
-    <div class="relative w-full max-w-2xl bg-white dark:bg-slate-800 rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="order-detail-title"
+      class="relative w-full max-w-2xl bg-white dark:bg-slate-800 rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]"
+    >
       <!-- Header -->
       <div class="flex items-center justify-between p-6 border-b border-slate-100 dark:border-slate-700">
         <div>
-          <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Detalle de Pedido</h2>
+          <h2 id="order-detail-title" class="text-2xl font-bold text-slate-900 dark:text-white">Detalle de Pedido</h2>
           <p class="text-sm text-slate-500 dark:text-slate-400 font-mono mt-1">{{ order.id }}</p>
         </div>
-        <button @click="emit('close')" class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
-          <X class="w-6 h-6" />
+        <button @click="emit('close')" aria-label="Cerrar detalles del pedido" class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+          <X class="w-6 h-6" aria-hidden="true" />
         </button>
       </div>
 

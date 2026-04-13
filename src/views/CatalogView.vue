@@ -49,11 +49,13 @@ const deleteProduct = (id: string) => {
     <!-- Search and Filter -->
     <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
       <div class="relative">
-        <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+        <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" aria-hidden="true" />
         <input
+          id="product-search"
           v-model="searchQuery"
           type="text"
           placeholder="Buscar por nombre o categoría..."
+          aria-label="Buscar productos"
           class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-white transition-shadow"
         />
       </div>
@@ -90,11 +92,19 @@ const deleteProduct = (id: string) => {
               <td class="p-4 font-medium text-slate-900 dark:text-white">{{ product.name }}</td>
               <td class="p-4 text-slate-600 dark:text-slate-300">{{ product.unit }}</td>
               <td class="p-4 text-right flex justify-end gap-2">
-                <button @click="openModal(product)" class="p-2 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20">
-                  <Edit class="w-5 h-5" />
+                <button
+                  @click="openModal(product)"
+                  :aria-label="`Editar ${product.name}`"
+                  class="p-2 text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                >
+                  <Edit class="w-5 h-5" aria-hidden="true" />
                 </button>
-                <button @click="deleteProduct(product.id)" class="p-2 text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20">
-                  <Trash2 class="w-5 h-5" />
+                <button
+                  @click="deleteProduct(product.id)"
+                  :aria-label="`Eliminar ${product.name}`"
+                  class="p-2 text-slate-400 hover:text-red-600 dark:hover:text-red-400 transition-colors rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20"
+                >
+                  <Trash2 class="w-5 h-5" aria-hidden="true" />
                 </button>
               </td>
             </tr>

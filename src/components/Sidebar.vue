@@ -23,11 +23,14 @@ const navItems = [
   <div>
     <!-- Sidebar Overlay -->
     <transition name="fade">
-      <div v-if="isOpen" @click="emit('close')" class="fixed inset-0 bg-black/50 z-40 lg:hidden"></div>
+      <div v-if="isOpen" @click="emit('close')" class="fixed inset-0 bg-black/50 z-40 lg:hidden" aria-hidden="true"></div>
     </transition>
 
     <!-- Sidebar -->
     <aside
+      role="navigation"
+      aria-label="Menú principal"
+      :aria-hidden="!isOpen"
       :class="[
         'fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-800 shadow-lg border-r border-slate-200 dark:border-slate-700 transform transition-transform duration-300 ease-in-out lg:translate-x-0',
         isOpen ? 'translate-x-0' : '-translate-x-full'
@@ -36,18 +39,23 @@ const navItems = [
       <div class="h-full flex flex-col">
         <div class="p-6 flex items-center justify-between">
           <h1 class="text-2xl font-bold text-red-600 dark:text-red-500">Carnicería</h1>
-          <button @click="themeStore.toggleTheme" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors lg:flex hidden">
-            <Sun v-if="themeStore.isDark" class="w-5 h-5 text-amber-500" />
-            <Moon v-else class="w-5 h-5 text-slate-600" />
+          <button
+            @click="themeStore.toggleTheme"
+            :aria-label="themeStore.isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+            class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors lg:flex hidden"
+          >
+            <Sun v-if="themeStore.isDark" class="w-5 h-5 text-amber-500" aria-hidden="true" />
+            <Moon v-else class="w-5 h-5 text-slate-600" aria-hidden="true" />
           </button>
         </div>
 
-        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto" aria-label="Navegación">
           <RouterLink
             v-for="item in navItems"
             :key="item.path"
             :to="item.path"
             @click="emit('close')"
+            :aria-current="route.path === item.path ? 'page' : undefined"
             class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200"
             :class="[
               route.path === item.path
@@ -55,7 +63,7 @@ const navItems = [
                 : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-slate-200'
             ]"
           >
-            <component :is="item.icon" class="w-5 h-5" />
+            <component :is="item.icon" class="w-5 h-5" aria-hidden="true" />
             {{ item.name }}
           </RouterLink>
         </nav>

@@ -1,6 +1,6 @@
 # Sistema de Gestión de una Carnicería
 
-Aplicación web para la gestión integral de una carnicería: control de pedidos, catálogo de productos y panel de métricas orquestado con IA.
+Aplicación web para la gestión integral de una carnicería: control de pedidos, catálogo de productos y panel de métricas.
 
 ---
 
@@ -16,8 +16,8 @@ Aplicación web para la gestión integral de una carnicería: control de pedidos
 | Vue Router | ^5.0 | Enrutamiento SPA |
 | Chart.js + vue-chartjs | ^4.5 / ^5.3 | Gráficas y métricas |
 | Lucide Vue Next | ^0.577 | Iconografía |
-| Express | ^4.21 | Servidor backend local |
-| better-sqlite3 | ^12.4 | Base de datos local SQLite |
+| Express | ^4.21 | Servidor backend local (Próximamente) |
+| better-sqlite3 | ^12.4 | Base de datos local SQLite (Próximamente) |
 | date-fns | ^4.1 | Manejo de fechas |
 
 ---
@@ -54,7 +54,6 @@ Aplicación web para la gestión integral de una carnicería: control de pedidos
 
    | Variable | Descripción |
    |---|---|
-   | `GEMINI_API_KEY` | Clave de API de Google Gemini (para el asistente de voz e IA) |
    | `APP_URL` | URL base donde se sirve la aplicación |
 
 3. **Iniciar el servidor de desarrollo:**
@@ -80,7 +79,7 @@ Aplicación web para la gestión integral de una carnicería: control de pedidos
 ## 📁 Estructura del Proyecto
 
 ```
-carnicería-isidora/
+butcheryorders_manual/
 ├── src/
 │   ├── components/         # Componentes reutilizables (modales, sidebar, gráficas)
 │   │   ├── AddOrderModal.vue
@@ -110,7 +109,6 @@ carnicería-isidora/
 Crea un archivo `.env.local` en la raíz del proyecto basándote en `.env.example`:
 
 ```env
-GEMINI_API_KEY="tu_api_key_de_gemini"
 APP_URL="http://localhost:3000"
 ```
 

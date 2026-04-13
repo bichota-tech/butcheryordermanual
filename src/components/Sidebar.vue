@@ -35,7 +35,7 @@ const navItems = [
     >
       <div class="h-full flex flex-col">
         <div class="p-6 flex items-center justify-between">
-          <h1 class="text-2xl font-bold text-red-600 dark:text-red-500">Isidora</h1>
+          <h1 class="text-2xl font-bold text-red-600 dark:text-red-500">Carnicería</h1>
           <button @click="themeStore.toggleTheme" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors lg:flex hidden">
             <Sun v-if="themeStore.isDark" class="w-5 h-5 text-amber-500" />
             <Moon v-else class="w-5 h-5 text-slate-600" />
@@ -67,7 +67,7 @@ const navItems = [
             </div>
             <div>
               <p class="text-sm font-medium">Admin</p>
-              <p class="text-xs text-slate-500 dark:text-slate-400">admin@isidora.cl</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">admin@carniceria.cl</p>
             </div>
           </div>
         </div>

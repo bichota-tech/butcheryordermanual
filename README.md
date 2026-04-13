@@ -111,4 +111,6 @@ PORT="3001"
 CORS_ORIGIN="http://localhost:3000"
 ```
 
-> **Nota importante:** Nunca subas el archivo `.env` ni los archivos `*.db` a tu repositorio de código. Ambos están ignorados en tu flujo Git.
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia **MIT**. Consulta el archivo `LICENSE` para más detalles.

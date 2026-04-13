@@ -13,8 +13,9 @@ const store = useDataStore();
 const form = ref({
   category: '',
   name: '',
-  unit: 'Kg' as 'Kg' | 'Gramos' | 'Persona',
+  unit: 'Kg' as 'Kg' | 'Gramos' | 'Persona' | 'Unidades',
 });
+
 
 const categories = [
   'Ternera',
@@ -86,9 +87,9 @@ const saveProduct = () => {
 
         <div class="space-y-2">
           <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Unidad de Medida *</label>
-          <div class="grid grid-cols-3 gap-3">
+          <div class="grid grid-cols-2 gap-3">
             <label
-              v-for="unit in ['Kg', 'Gramos', 'Persona']"
+              v-for="unit in ['Kg', 'Gramos', 'Persona', 'Unidades']"
               :key="unit"
               class="relative flex items-center justify-center p-3 border rounded-xl cursor-pointer transition-all"
               :class="[

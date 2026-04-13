@@ -7,7 +7,7 @@ export interface Product {
   id: string;
   category: string;
   name: string;
-  unit: 'Kg' | 'Gramos' | 'Persona';
+  unit: 'Kg' | 'Gramos' | 'Persona' | 'Unidades';
 }
 
 export interface OrderItem {

@@ -4,7 +4,7 @@ import cors from 'cors';
 import { PrismaClient } from '@prisma/client';
 
 // ── Allowed values (enum-like validation) ────────────────────────────
-const VALID_UNITS = ['Kg', 'Gramos', 'Persona'] as const;
+const VALID_UNITS = ['Kg', 'Gramos', 'Persona', 'Unidades'] as const;
 const VALID_STATUSES = ['Pendiente', 'Completado', 'Archivado'] as const;
 type Unit = typeof VALID_UNITS[number];
 type Status = typeof VALID_STATUSES[number];

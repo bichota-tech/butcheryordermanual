@@ -3,9 +3,11 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { RouterView, RouterLink, useRoute } from 'vue-router';
 import Sidebar from '@/components/Sidebar.vue';
 import { useThemeStore } from '@/stores/theme';
+import { useDataStore } from '@/stores/data';
 import { Menu, X, Moon, Sun, LayoutDashboard, ShoppingCart, BookOpen } from 'lucide-vue-next';
 
 const themeStore = useThemeStore();
+const dataStore = useDataStore();
 const route = useRoute();
 const isSidebarOpen = ref(false);
 const isMobile = ref(window.innerWidth < 768);
@@ -36,6 +38,7 @@ const handleResize = () => {
 onMounted(() => {
   themeStore.initTheme();
   window.addEventListener('resize', handleResize);
+  dataStore.fetchInitialData();
 });
 
 onUnmounted(() => {
@@ -54,7 +57,7 @@ onUnmounted(() => {
       >
         <!-- Mobile & Tablet Header -->
         <div class="lg:hidden sticky top-0 z-30 flex items-center justify-between p-4 bg-white dark:bg-slate-800 shadow-sm border-b border-slate-200 dark:border-slate-700 h-16 shrink-0">
-          <h1 class="text-xl font-bold text-red-600 dark:text-red-500">Carnicería Isidora</h1>
+          <h1 class="text-xl font-bold text-red-600 dark:text-red-500">Carnicería</h1>
           
           <!-- Tablet Navigation -->
           <nav class="hidden md:flex items-center gap-2">

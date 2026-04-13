@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
+
+const API = 'http://localhost:3001/api';
 
 export interface Product {
   id: string;
@@ -9,14 +11,16 @@ export interface Product {
 }
 
 export interface OrderItem {
+  id: string;
   productId: string;
   quantity: number;
+  product?: Product;
 }
 
 export interface Order {
   id: string;
   customerName: string;
-  phone?: string;
+  phone?: string | null;
   pickupDate: string;
   items: OrderItem[];
   status: 'Pendiente' | 'Completado' | 'Archivado';
@@ -24,74 +28,90 @@ export interface Order {
 }
 
 export const useDataStore = defineStore('data', () => {
-  const products = ref<Product[]>([
-    { id: '1', category: 'Ternera', name: 'Lomo Vetado', unit: 'Kg' },
-    { id: '2', category: 'Pollo', name: 'Pechuga de Pollo', unit: 'Kg' },
-    { id: '3', category: 'Cerdo', name: 'Costillar', unit: 'Kg' },
-    { id: '4', category: 'Mixtos', name: 'Chorizo Parrillero', unit: 'Gramos' },
-    { id: '5', category: 'Especiales', name: 'Parrillada Familiar', unit: 'Persona' },
-  ]);
+  const products = ref<Product[]>([]);
+  const orders = ref<Order[]>([]);
+  const loading = ref(false);
+  const error = ref<string | null>(null);
 
-  const orders = ref<Order[]>([
-    {
-      id: 'ORD-001',
-      customerName: 'Juan Pérez',
-      phone: '+56912345678',
-      pickupDate: '2023-11-15T10:00',
-      items: [
-        { productId: '1', quantity: 2 },
-        { productId: '3', quantity: 500 },
-      ],
-      status: 'Pendiente',
-      createdAt: '2023-11-14T15:30',
-    },
-    {
-      id: 'ORD-002',
-      customerName: 'María González',
-      pickupDate: '2023-11-16T12:00',
-      items: [
-        { productId: '4', quantity: 4 },
-      ],
-      status: 'Completado',
-      createdAt: '2023-11-14T16:45',
-    },
-  ]);
-
-  const addProduct = (product: Omit<Product, 'id'>) => {
-    const newProduct = { ...product, id: Math.random().toString(36).substr(2, 9) };
-    products.value.push(newProduct);
-  };
-
-  const updateProduct = (id: string, updatedProduct: Omit<Product, 'id'>) => {
-    const index = products.value.findIndex(p => p.id === id);
-    if (index !== -1) {
-      products.value[index] = { ...updatedProduct, id };
+  // ── FETCH INITIAL DATA ──────────────────────────────────────────────
+  const fetchInitialData = async () => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const [productsRes, ordersRes] = await Promise.all([
+        fetch(`${API}/products`),
+        fetch(`${API}/orders`),
+      ]);
+      if (!productsRes.ok || !ordersRes.ok) throw new Error('Error al cargar datos');
+      products.value = await productsRes.json();
+      orders.value = await ordersRes.json();
+    } catch (e: any) {
+      error.value = e.message || 'Error de conexión con el servidor';
+    } finally {
+      loading.value = false;
     }
   };
 
-  const deleteProduct = (id: string) => {
+  // ── PRODUCTS ────────────────────────────────────────────────────────
+  const addProduct = async (product: Omit<Product, 'id'>) => {
+    const res = await fetch(`${API}/products`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(product),
+    });
+    if (!res.ok) throw new Error('Error al crear producto');
+    const created: Product = await res.json();
+    products.value.push(created);
+  };
+
+  const updateProduct = async (id: string, updated: Omit<Product, 'id'>) => {
+    const res = await fetch(`${API}/products/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updated),
+    });
+    if (!res.ok) throw new Error('Error al actualizar producto');
+    const saved: Product = await res.json();
+    const idx = products.value.findIndex(p => p.id === id);
+    if (idx !== -1) products.value[idx] = saved;
+  };
+
+  const deleteProduct = async (id: string) => {
+    const res = await fetch(`${API}/products/${id}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error('Error al eliminar producto');
     products.value = products.value.filter(p => p.id !== id);
   };
 
-  const addOrder = (order: Omit<Order, 'id' | 'createdAt'>) => {
-    const newOrder = {
-      ...order,
-      id: `ORD-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`,
-      createdAt: new Date().toISOString(),
-    };
-    orders.value.push(newOrder);
+  // ── ORDERS ──────────────────────────────────────────────────────────
+  const addOrder = async (order: Omit<Order, 'id' | 'createdAt'>) => {
+    const res = await fetch(`${API}/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(order),
+    });
+    if (!res.ok) throw new Error('Error al crear pedido');
+    const created: Order = await res.json();
+    orders.value.unshift(created);
   };
 
-  const updateOrderStatus = (id: string, status: Order['status']) => {
-    const order = orders.value.find(o => o.id === id);
-    if (order) {
-      order.status = status;
-    }
+  const updateOrderStatus = async (id: string, status: Order['status']) => {
+    const res = await fetch(`${API}/orders/${id}/status`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status }),
+    });
+    if (!res.ok) throw new Error('Error al actualizar estado del pedido');
+    const updated: Order = await res.json();
+    const idx = orders.value.findIndex(o => o.id === id);
+    if (idx !== -1) orders.value[idx] = updated;
   };
 
   return {
     products,
     orders,
+    loading,
+    error,
+    fetchInitialData,
     addProduct,
     updateProduct,
     deleteProduct,

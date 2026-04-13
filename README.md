@@ -16,8 +16,9 @@ Aplicación web para la gestión integral de una carnicería: control de pedidos
 | Vue Router | ^5.0 | Enrutamiento SPA |
 | Chart.js + vue-chartjs | ^4.5 / ^5.3 | Gráficas y métricas |
 | Lucide Vue Next | ^0.577 | Iconografía |
-| Express | ^4.21 | Servidor backend local (Próximamente) |
-| better-sqlite3 | ^12.4 | Base de datos local SQLite (Próximamente) |
+| Express | ^4.21 | Servidor backend local (API REST) |
+| Prisma ORM | ^6.19 | Manejo e interacción con BD |
+| SQLite | - | Base de datos persistente transaccional |
 | date-fns | ^4.1 | Manejo de fechas |
 
 ---
@@ -56,11 +57,11 @@ Aplicación web para la gestión integral de una carnicería: control de pedidos
    |---|---|
    | `APP_URL` | URL base donde se sirve la aplicación |
 
-3. **Iniciar el servidor de desarrollo:**
+3. **Iniciar el servidor y cliente:**
    ```bash
    npm run dev
    ```
-   La aplicación estará disponible en `http://localhost:3000`.
+   La aplicación se levantará en `http://localhost:3000` y la API en `http://localhost:3001`.
 
 ---
 
@@ -68,48 +69,46 @@ Aplicación web para la gestión integral de una carnicería: control de pedidos
 
 | Comando | Descripción |
 |---|---|
-| `npm run dev` | Inicia el servidor de desarrollo en `http://localhost:3000` |
+| `npm run dev` | Inicia **simultáneamente** el cliente y el servidor backend |
+| `npm run dev:client` | Inicia únicamente el servidor Vite (Frontend) |
+| `npm run dev:server` | Inicia únicamente el servidor Express TypeScript (Backend) |
 | `npm run build` | Genera la build de producción en `/dist` |
 | `npm run preview` | Previsualiza la build de producción |
 | `npm run lint` | Verifica tipos con `vue-tsc` |
-| `npm run clean` | Elimina la carpeta `/dist` |
 
 ---
 
 ## 📁 Estructura del Proyecto
 
-```
+```text
 butcheryorders_manual/
+├── server/
+│   └── index.ts            # Servidor API Express y endpoints REST
+├── prisma/
+│   ├── dev.db              # Base de datos SQLite (Persistente)
+│   └── schema.prisma       # Esquema y modelos de la base de datos
 ├── src/
-│   ├── components/         # Componentes reutilizables (modales, sidebar, gráficas)
-│   │   ├── AddOrderModal.vue
-│   │   ├── OrderModal.vue
-│   │   ├── OrdersChart.vue
-│   │   ├── ProductModal.vue
-│   │   └── Sidebar.vue
-│   ├── views/              # Páginas principales de la app
-│   │   ├── DashboardView.vue
-│   │   ├── OrdersView.vue
-│   │   └── CatalogView.vue
+│   ├── components/         # Componentes reutilizables UI
+│   ├── views/              # Vistas principales de la App
 │   ├── router/             # Configuración de Vue Router
-│   ├── stores/             # Stores de Pinia (tema, pedidos, productos...)
-│   ├── App.vue             # Componente raíz con layout principal
-│   └── main.ts             # Punto de entrada
-├── index.html
-├── vite.config.ts
-├── tsconfig.json
-├── package.json
-└── .env.example
+│   ├── stores/             # Acciones AJAX y peticiones al backend (Pinia)
+│   ├── App.vue             # Componente raíz
+│   └── main.ts             # Punto de entrada de Vue
+├── .env                    # Entorno y cadena de conexión a BD
+├── package.json            # Dependencias y scripts
+└── vite.config.ts          # Configuración de compilación Vite
 ```
 
 ---
 
 ## 🔑 Variables de Entorno
 
-Crea un archivo `.env.local` en la raíz del proyecto basándote en `.env.example`:
+Crea un archivo `.env` en la raíz del proyecto para conectarte a la base de datos:
 
 ```env
-APP_URL="http://localhost:3000"
+DATABASE_URL="file:./dev.db"
+PORT="3001"
+CORS_ORIGIN="http://localhost:3000"
 ```
 
-> **Nota:** Nunca subas `.env.local` al repositorio. Está incluido en `.gitignore`.
+> **Nota importante:** Nunca subas el archivo `.env` ni los archivos `*.db` a tu repositorio de código. Ambos están ignorados en tu flujo Git.

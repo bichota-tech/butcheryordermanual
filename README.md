@@ -1,6 +1,6 @@
-# Sistema de Gestión de una Carnicería
+# Sistema de Gestión Comercial
 
-Aplicación web para la gestión integral de una carnicería: control de pedidos, catálogo de productos y panel de métricas.
+Aplicación web para la gestión comercial: control de pedidos, catálogo de productos y panel de métricas.
 
 ---
 
